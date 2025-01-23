@@ -78,7 +78,14 @@ public class Tile
         {
             var destination = destinations.First();
             destinations.RemoveAt(0);
-            if (!result.TryAdd(destination.tile, destination.distanceLeft)) continue;
+            
+            // don't travel to where we started
+            if (destination.tile == this) continue;
+
+            // don't travel where we've already been
+            if (!result.TryAdd(destination.tile, destination.distanceLeft)) continue; 
+
+            // don't travel further than the maximum distance
             var distanceLeft = destination.distanceLeft - 1;
             if (distanceLeft < 0) continue;
             destinations.AddRange(destination.tile._adjacentTiles.Select(tile => (tile, distanceLeft)));
