@@ -12,9 +12,17 @@ public class BoardTests
     {
         var tiles = Enumerable.Range(1, 20).Select(id => new Tile(id)).ToArray();
 
-        var board = new BoardBuilder().WithTiles(tiles).WithLayout([ (1, [ 2, 5, 6 ]), (2, [ 3, 5, 6, 7 ]), (3, [ 4, 6, 7, 8 ]), (4, [ 7, 8 ]),
-                                                                     (5, [ 6, 9, 10 ]), (6, [ 7, 9, 10, 11 ]), (7, [ 8, 10, 11, 12 ]), (8, [ 11, 12 ]),
-                                                                     (9, [ 10 ]), (10, [ 11 ]), (11, [ 12 ]) ])
+        var board = new BoardBuilder().WithTiles(tiles).WithLayout([(1, [2, 5, 6]),
+                                                                    (2, [3, 5, 6, 7]),
+                                                                    (3, [4, 6, 7, 8]),
+                                                                    (4, [7, 8]),
+                                                                    (5, [6, 9, 10]),
+                                                                    (6, [7, 9, 10, 11]),
+                                                                    (7, [8, 10, 11, 12]),
+                                                                    (8, [11, 12]),
+                                                                    (9, [10]),
+                                                                    (10, [11]),
+                                                                    (11, [12])])
                                       .Build();
         var start = board.GetTile(startingTile);
         var destinations = start.Travel(1);
