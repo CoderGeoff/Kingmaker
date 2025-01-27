@@ -8,7 +8,7 @@ public class BoardTests
     [TestCase(1, "2(0), 5(0), 6(0)")]
     [TestCase(2, "1(0), 3(0), 5(0), 6(0), 7(0)")]
     [TestCase(6, "1(0), 2(0), 3(0), 5(0), 7(0), 9(0), 10(0), 11(0)")]
-    public void GivenASimpleSquareBoard_Travel1Space_ShouldReturnTheExpectedDestinations(int startingTile, string expectedDestinations)
+    public void GivenASimpleBoard_Travel1Space_ShouldReturnTheExpectedDestinations(int startingTile, string expectedDestinations)
     {
         var tiles = Enumerable.Range(1, 20).Select(id => new Tile(id)).ToArray();
 
@@ -32,7 +32,7 @@ public class BoardTests
 
     [TestCase(1, "2(1), 3(0), 5(1), 6(1), 7(0), 9(0), 10(0), 11(0)")]
     [TestCase(6, "1(1), 2(1), 3(1), 4(0), 5(1), 7(1), 8(0), 9(1), 10(1), 11(1), 12(0)")]
-    public void GivenASimpleSquareBoard_Travel2Spaces_ShouldReturnTheExpectedDestinations(int startingTile, string expectedDestinations)
+    public void GivenASimpleBoard_Travel2Spaces_ShouldReturnTheExpectedDestinations(int startingTile, string expectedDestinations)
     {
         var tiles = Enumerable.Range(1, 20).Select(id => new Tile(id)).ToArray();
 
