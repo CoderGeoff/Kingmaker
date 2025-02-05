@@ -2,11 +2,11 @@
 
 public class RoadNetworkBuilder
 {
-    private readonly Tile[] _tiles;
+    private readonly Tiles _tiles;
     private readonly Dictionary<Names.Place, Place> _places;
     private readonly List<(Tile from, Place? via, Tile to)> _roadSegments = new();
 
-    public RoadNetworkBuilder(Tile[] tiles, Dictionary<Names.Place, Place> places)
+    public RoadNetworkBuilder(Tiles tiles, Dictionary<Names.Place, Place> places)
     {
         _tiles = tiles;
         _places = places;

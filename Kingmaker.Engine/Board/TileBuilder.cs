@@ -10,13 +10,13 @@ public class TileBuilder
         return this;
     }
 
-    public Tile[] Build()
+    public Tiles Build()
     {
         var ensureSequenceIsNotEmpty = new [] { 0 };
         var highestId = _adjacentTiles.SelectMany(entry => new[] { entry.Item1 }.Concat(entry.Item2)).Concat(ensureSequenceIsNotEmpty).Max();
         var tiles = Enumerable.Range(0, highestId + 1).Select(id => new Tile(id)).ToArray();
         _adjacentTiles.ToList().ForEach(SetAdjacentTiles);
-        return tiles;
+        return new Tiles(tiles);
 
         void SetAdjacentTiles((int tile, int[] adjacentTiles) entry)
         {
