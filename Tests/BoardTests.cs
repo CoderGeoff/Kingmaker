@@ -23,9 +23,12 @@ public class BoardTests
                                 (10, [11]),
                                 (11, [12])])
                    .Build();
-        var board = new Board(tiles, new Dictionary<Names.Place, Place>());
+
+        var places = new PlaceBuilder().Build();
+        var roads = new RoadNetworkBuilder(tiles, places).Build();
+        var board = new Board(tiles, new Dictionary<Names.Place, Place>(), roads);
         var start = board.GetTile(startingTile);
-        var destinations = start.Travel(1);
+        var destinations = board.TravelFrom(start, 1);
         var asString = AsString(destinations);
         Assert.That(asString, Is.EqualTo(expectedDestinations), asString);
     }
@@ -48,9 +51,11 @@ public class BoardTests
                                 (11, [12])])
                    .Build();
 
-        var board = new Board(tiles, new Dictionary<Names.Place, Place>());
+        var places = new PlaceBuilder().Build();
+        var roads = new RoadNetworkBuilder(tiles, places).Build();
+        var board = new Board(tiles, new Dictionary<Names.Place, Place>(), roads);
         var start = board.GetTile(startingTile);
-        var destinations = start.Travel(2);
+        var destinations = board.TravelFrom(start, 2);
         var asString = AsString(destinations);
         Assert.That(asString, Is.EqualTo(expectedDestinations), asString);
     }
@@ -62,11 +67,12 @@ public class BoardTests
         
         var places = new PlaceBuilder().With(Names.Place.Wells, PlaceAttributes.TownWithCathedral, tiles[2])
                                        .With(Names.Place.Coventry, PlaceAttributes.City, tiles[1])
+                                        // TODO put road building here
                                        .Build();
 
-        places[Names.Place.Coventry].BuildRoadTo(tiles[2]).BuildRoadTo(tiles[7]).BuildRoadTo(tiles[12]);
+        var roads = new RoadNetworkBuilder(tiles, places).BuildRoad(1, Names.Place.Coventry, 2).BuildRoad(2, 7).BuildRoad(7, 12).Build();
 
-        var board = new Board(tiles, places);
+        var board = new Board(tiles, places, roads);
         var start = board.GetTile(startingTile);
         var destinations = start.Travel(1);
         var asString = AsString(destinations);

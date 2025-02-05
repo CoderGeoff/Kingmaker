@@ -1,6 +1,6 @@
 ﻿namespace Kingmaker.Engine.Board;
 
-public class Place : CanBeOnARoad, IPlaceAttributes
+public class Place : IPlaceAttributes
 {
     private readonly PlaceAttributes _attributes;
     private readonly Tile _tile;
@@ -11,8 +11,6 @@ public class Place : CanBeOnARoad, IPlaceAttributes
         _tile = tile;
         Name = name;
     }
-
-    protected virtual BuildRoad
 
     public Names.Place Name { get; }
     public int Capacity => _attributes.Capacity;

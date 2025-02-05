@@ -1,6 +1,6 @@
 ﻿namespace Kingmaker.Engine.Board;
 
-public class Tile : CanBeOnARoad
+public class Tile
 {
     private readonly string[] _placeNames;
     private readonly List<Tile> _adjacentTiles = new();
@@ -20,31 +20,12 @@ public class Tile : CanBeOnARoad
 
     public IEnumerable<(Tile destination, int distanceLeft)> Travel(int maximumDistance)
     {
+        return maximumDistance <= 0 ? [] : TravelCrossCountry(maximumDistance);
+    }
+
+    private IEnumerable<(Tile destination, int distanceLeft)> TravelCrossCountry(int maximumDistance)
+    {
         var result = new Dictionary<Tile, int>();
-        if (maximumDistance <= 0) return [];
-        return TravelCrossCountry(maximumDistance, result)
-              .Concat(TravelByRoad())
-              .DistinctBy(entry => entry.Key.Id)
-              .OrderBy(entry => entry.Key.Id);
-    }
-
-    private IEnumerable<(Tile Key, int Value)> TravelByRoad()
-    {
-        if (!IsOnRoad(out var nextRoadSegments))
-            return [];
-
-        var destinationsReached = nextRoadSegments.ToHashSet();
-        var departurePoints = new Queue<CanBeOnARoad>(nextRoadSegments);
-        while (departurePoints.TryDequeue(out var z))
-        {
-            if (!destinationsReached.Add(z)) continue;
-            departurePoints.Enqueue(z);
-        }
-        return destinationsReached.OfType<Tile>().Select(z => (z, 0));
-    }
-
-    private IEnumerable<(Tile Key, int Value)> TravelCrossCountry(int maximumDistance, Dictionary<Tile, int> result)
-    {
         var destinations = _adjacentTiles.Select(tile => (tile, distanceLeft: maximumDistance - 1)).ToList();
         while (destinations.Any())
         {
@@ -63,7 +44,6 @@ public class Tile : CanBeOnARoad
             destinations.AddRange(destination.tile._adjacentTiles.Select(tile => (tile, distanceLeft)));
         }
 
-        var valueTuples = result.Select(entry => (entry.Key, entry.Value));
-        return valueTuples;
+        return result.Select(entry => (entry.Key, entry.Value));
     }
 }

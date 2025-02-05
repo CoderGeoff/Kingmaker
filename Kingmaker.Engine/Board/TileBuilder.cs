@@ -1,6 +1,4 @@
-﻿using Kingmaker.Engine.Board;
-
-namespace Tests;
+﻿namespace Kingmaker.Engine.Board;
 
 public class TileBuilder
 {
