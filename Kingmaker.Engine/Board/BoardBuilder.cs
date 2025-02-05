@@ -6,9 +6,16 @@ public class BoardBuilder
 {
     private readonly Dictionary<int, Tile> _tiles = new();
     private readonly List<(int, int[])> _adjacentTiles = new();
+    private readonly List<List<(int tile, string placeName)>> _roads = new();
 
     public BoardBuilder WithPlaces(PlaceAttributes placeAttributes, params (int tile, string placeNames)[] places)
     {
+        return this;
+    }
+
+    public BoardBuilder WithRoad(params (int tile, string placeName)[] places)
+    {
+        _roads.Add(places.ToList());
         return this;
     }
 
@@ -26,10 +33,10 @@ public class BoardBuilder
 
     public Board Build()
     {
-        _adjacentTiles.ToList().ForEach(Set);
+        _adjacentTiles.ToList().ForEach(SetAdjacentTiles);
         return new Board(_tiles);
 
-        void Set((int tile, int[] adjacentTiles) entry)
+        void SetAdjacentTiles((int tile, int[] adjacentTiles) entry)
         {
             var thisTile = _tiles[entry.tile];
             var adjacentTiles = entry.adjacentTiles.Select(t => _tiles[t]).ToList();
@@ -52,10 +59,44 @@ public class PlaceAttributes
     }
 }
 
+public class RoadSegment
+{
+    public RoadSegment(Tile tile)
+    {
+        _tile = tile;
+    }
+
+    private readonly Tile _tile;
+    private RoadSegment? _red;
+    private RoadSegment? _blue;
+
+    public enum Direction { Red, Blue }
+
+    public void Set(Direction direction, RoadSegment segment)
+    {
+        if (direction == Direction.Blue) _blue = segment;
+        else _red = segment;
+    }
+
+    bool TryTravel(Direction direction, out RoadSegment segment)
+    {
+        var destination = direction switch
+                          {
+                          Direction.Red => _red,
+                          Direction.Blue => _blue,
+                          _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, null)
+                          };
+        segment = destination!;
+        return destination != null;
+    }
+}
+
 public class Tile
 {
     private readonly string[] _placeNames;
     private readonly List<Tile> _adjacentTiles = new();
+    private readonly List<RoadSegment> _roadSegments = new();
+
     public Tile(int id, params string[] placeNames)
     {
         _placeNames = placeNames;
@@ -73,6 +114,29 @@ public class Tile
     {
         var result = new Dictionary<Tile, int>();
         if (maximumDistance <= 0) return [];
+        return TravelCrossCountry(maximumDistance, result)
+           .Concat(TravelByRoad())
+              .DistinctBy(entry => entry.Key.Id)
+              .OrderBy(entry => entry.Key.Id);
+    }
+
+    private IEnumerable<(Tile Key, int Value)> TravelByRoad()
+    {
+        return !IsOnRoad() ? [] : TravelByRoad2();
+
+        IEnumerable<(Tile Key, int Value)> TravelByRoad2()
+        {
+            _
+        }
+    }
+
+    private bool IsOnRoad()
+    {
+        return false;
+    }
+
+    private IEnumerable<(Tile Key, int Value)> TravelCrossCountry(int maximumDistance, Dictionary<Tile, int> result)
+    {
         var destinations = _adjacentTiles.Select(tile => (tile, distanceLeft: maximumDistance - 1)).ToList();
         while (destinations.Any())
         {
@@ -91,7 +155,8 @@ public class Tile
             destinations.AddRange(destination.tile._adjacentTiles.Select(tile => (tile, distanceLeft)));
         }
 
-        return result.Select(entry => (entry.Key, entry.Value)).OrderBy(entry => entry.Key.Id);
+        var valueTuples = result.Select(entry => (entry.Key, entry.Value));
+        return valueTuples;
     }
 }
 
