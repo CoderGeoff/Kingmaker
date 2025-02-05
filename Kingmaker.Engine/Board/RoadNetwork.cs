@@ -16,8 +16,11 @@ public class RoadNetwork
         {
             foreach (var possibleDestination in _roadSegments[next])
             {
+                // don't travel back to where we started
+                if (possibleDestination.destination == start) continue;
+                // don't travel back to where we've passed through
                 if (!result.Add(possibleDestination.destination)) continue;
-                // not we should only look at must pass through here, when looking to add to pending
+                // note we should only look at must pass through here, when looking to add to pending
                 pending.Enqueue(possibleDestination.destination);
             }
         }

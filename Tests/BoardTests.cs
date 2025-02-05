@@ -60,21 +60,21 @@ public class BoardTests
         Assert.That(asString, Is.EqualTo(expectedDestinations), asString);
     }
 
-    [TestCase(1, "2(0), 5(0), 6(0), 7(0), 12(0)")]
-    public void GivenABoardWithARoad_Travel1Space_ShouldReturnTheExpectedDestinations(int startingTile, string expectedDestinations)
+    [TestCase(1, "2(0), 7(0), 12(0)")]
+    [TestCase(7, "1(0), 2(0), 12(0)")]
+    public void GivenABoardWithARoadButNoAdjacentSpaces_Travel1Space_ShouldReturnTheExpectedDestinations(int startingTile, string expectedDestinations)
     {
         var tiles = new TileBuilder().WithLayout((12, [])).Build();
         
         var places = new PlaceBuilder().With(Names.Place.Wells, PlaceAttributes.TownWithCathedral, tiles[2])
                                        .With(Names.Place.Coventry, PlaceAttributes.City, tiles[1])
-                                        // TODO put road building here
                                        .Build();
 
         var roads = new RoadNetworkBuilder(tiles, places).BuildRoad(1, Names.Place.Coventry, 2).BuildRoad(2, 7).BuildRoad(7, 12).Build();
 
         var board = new Board(tiles, places, roads);
         var start = board.GetTile(startingTile);
-        var destinations = start.Travel(1);
+        var destinations = board.TravelFrom(start, 1);
         var asString = AsString(destinations);
         Assert.That(asString, Is.EqualTo(expectedDestinations), asString);
     }
