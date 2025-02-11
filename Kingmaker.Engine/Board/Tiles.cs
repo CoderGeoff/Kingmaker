@@ -1,4 +1,6 @@
-﻿namespace Kingmaker.Engine.Board;
+﻿using Kingmaker.Engine.Rules;
+
+namespace Kingmaker.Engine.Board;
 
 public class Tiles
 {
@@ -11,15 +13,15 @@ public class Tiles
 
     public Tile this[int i] => _tiles[i];
 
-    public IEnumerable<(Tile destination, int distanceLeft)> TravelFrom(Tile start, int maximumDistance)
+    public IEnumerable<(Tile destination, int distanceLeft)> TravelFrom(Tile start, int maximumDistance, IMoveCrossCountryRules rules)
     {
-        return maximumDistance <= 0 ? [] : TravelCrossCountry(start, maximumDistance);
+        return maximumDistance <= 0 ? [] : TravelCrossCountry(start, maximumDistance, rules);
     }
 
-    private IEnumerable<(Tile destination, int distanceLeft)> TravelCrossCountry(Tile start, int maximumDistance)
+    private IEnumerable<(Tile destination, int distanceLeft)> TravelCrossCountry(Tile start, int maximumDistance, IMoveCrossCountryRules rules)
     {
         var result = new Dictionary<Tile, int>();
-        var destinations = start.AdjacentTiles.Select(tile => (tile, distanceLeft: maximumDistance - 1)).ToList();
+        var destinations = rules.MoveCrossCountry(start, maximumDistance).ToList();
         while (destinations.Any())
         {
             var destination = destinations.First();
@@ -33,14 +35,9 @@ public class Tiles
             if (!result.TryAdd(destination.tile, destination.distanceLeft))
                 continue;
 
-            // don't travel further than the maximum distance
-            var distanceLeft = destination.distanceLeft - 1;
-            if (distanceLeft < 0)
-                continue;
-            destinations.AddRange(destination.tile.AdjacentTiles.Select(tile => (tile, distanceLeft)));
+            destinations.AddRange(rules.MoveCrossCountry(destination.tile, destination.distanceLeft));
         }
 
         return result.Select(entry => (entry.Key, entry.Value));
     }
-
 }

@@ -1,4 +1,6 @@
-﻿namespace Kingmaker.Engine.Board;
+﻿using Kingmaker.Engine.Constants;
+
+namespace Kingmaker.Engine.Board;
 
 public class PlaceBuilder
 {

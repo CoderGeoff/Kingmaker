@@ -1,5 +1,8 @@
-﻿using Kingmaker.Engine.Board;
+﻿using Kingmaker.Engine;
+using Kingmaker.Engine.Board;
+using Kingmaker.Engine.Constants;
 using NUnit.Framework;
+using Place = Kingmaker.Engine.Board.Place;
 
 namespace Tests;
 
@@ -8,7 +11,7 @@ public class BoardTests
     [TestCase(1, "2(0), 5(0), 6(0)")]
     [TestCase(2, "1(0), 3(0), 5(0), 6(0), 7(0)")]
     [TestCase(6, "1(0), 2(0), 3(0), 5(0), 7(0), 9(0), 10(0), 11(0)")]
-    public void GivenASimpleBoard_Travel1Space_ShouldReturnTheExpectedDestinations(int startingTile, string expectedDestinations)
+    public void GivenASimpleBoard_PossibleDestinationsWith1Space_ShouldReturnTheExpectedDestinations(int startingTile, string expectedDestinations)
     {
         var tiles = new TileBuilder()
                    .WithLayout([(1, [2, 5, 6]),
@@ -28,14 +31,14 @@ public class BoardTests
         var roads = new RoadNetworkBuilder(tiles, places).Build();
         var board = new Board(tiles, new Dictionary<Names.Place, Place>(), roads);
         var start = board.GetTile(startingTile);
-        var destinations = board.PossibleDestinations(start, 1);
+        var destinations = board.PossibleDestinations(new Faction(), start, 1);
         var asString = AsString(destinations);
         Assert.That(asString, Is.EqualTo(expectedDestinations), asString);
     }
 
     [TestCase(1, "2(1), 3(0), 5(1), 6(1), 7(0), 9(0), 10(0), 11(0)")]
     [TestCase(6, "1(1), 2(1), 3(1), 4(0), 5(1), 7(1), 8(0), 9(1), 10(1), 11(1), 12(0)")]
-    public void GivenASimpleBoard_Travel2Spaces_ShouldReturnTheExpectedDestinations(int startingTile, string expectedDestinations)
+    public void GivenASimpleBoard_PossibleDestinationsWith2Spaces_ShouldReturnTheExpectedDestinations(int startingTile, string expectedDestinations)
     {
         var tiles = new TileBuilder()
                    .WithLayout([(1, [2, 5, 6]),
@@ -55,14 +58,14 @@ public class BoardTests
         var roads = new RoadNetworkBuilder(tiles, places).Build();
         var board = new Board(tiles, new Dictionary<Names.Place, Place>(), roads);
         var start = board.GetTile(startingTile);
-        var destinations = board.PossibleDestinations(start, 2);
+        var destinations = board.PossibleDestinations(new Faction(), start, 2);
         var asString = AsString(destinations);
         Assert.That(asString, Is.EqualTo(expectedDestinations), asString);
     }
 
     [TestCase(1, "2(0), 7(0), 12(0)")]
     [TestCase(7, "1(0), 2(0), 12(0)")]
-    public void GivenABoardWithARoadButNoAdjacentSpaces_Travel1Space_ShouldReturnTheExpectedDestinations(int startingTile, string expectedDestinations)
+    public void GivenABoardWithARoadButNoAdjacentSpaces_PossibleDestinationsWith1Space_ShouldReturnTheExpectedDestinations(int startingTile, string expectedDestinations)
     {
         var tiles = new TileBuilder().WithLayout((12, [])).Build();
         
@@ -74,13 +77,14 @@ public class BoardTests
 
         var board = new Board(tiles, places, roads);
         var start = board.GetTile(startingTile);
-        var destinations = board.PossibleDestinations(start, 1);
+        var destinations = board.PossibleDestinations(new Faction(), start, 1);
         var asString = AsString(destinations);
         Assert.That(asString, Is.EqualTo(expectedDestinations), asString);
     }
 
-    [TestCase(1, "2(0), 7(0), 12(0)")] [TestCase(7, "1(0), 2(0), 12(0)")]
-    public void GivenABoardWithARoadThroughAnOpponentsCastle_Travel1Space_ShouldReturnTheExpectedDestinations(int startingTile, string expectedDestinations)
+    [TestCase(1, "2(0), 7(0), 12(0)")] 
+    [TestCase(7, "1(0), 2(0), 12(0)")]
+    public void GivenABoardWithARoadThroughAnOpponentsCastle_PossibleDestinationsWith1Space_ShouldReturnTheExpectedDestinations(int startingTile, string expectedDestinations)
     {
         var tiles = new TileBuilder().WithLayout((12, [])).Build();
 
@@ -92,11 +96,14 @@ public class BoardTests
 
         var board = new Board(tiles, places, roads);
         var start = board.GetTile(startingTile);
-        var destinations = board.PossibleDestinations(start, 1);
+        var player1 = new Faction();
+        var player2 = new Faction();
+        board.GetPlace(Names.Place.Coventry).TryGrantTo(player1);
+
+        var destinations = board.PossibleDestinations(player2, start, 1);
         var asString = AsString(destinations);
         Assert.That(asString, Is.EqualTo(expectedDestinations), asString);
     }
-
 
     private static string AsString(IEnumerable<(Tile destination, int distanceLeft)> destinations)
     {

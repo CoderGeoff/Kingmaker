@@ -1,4 +1,7 @@
-﻿namespace Kingmaker.Engine.Board;
+﻿using Kingmaker.Engine.Constants;
+using Kingmaker.Engine.Rules;
+
+namespace Kingmaker.Engine.Board;
 
 public class Board
 {
@@ -18,11 +21,17 @@ public class Board
         return _tiles[id];
     }
 
-    public IEnumerable<(Tile destination, int distanceLeft)> TravelFrom(Tile start, int distance)
+    public IEnumerable<(Tile destination, int distanceLeft)> PossibleDestinations(Faction faction, Tile start, int distance)
     {
-        var reachedCrossCountry = _tiles.TravelFrom(start, distance);
-        var reachedByRoad = _roads.TravelFrom(start);
+        var rules = new ClassicMovementRules();
+        var reachedCrossCountry = _tiles.TravelFrom(start, distance, rules);
+        var reachedByRoad = _roads.TravelFrom(start, faction, rules);
         var all = reachedCrossCountry.Concat(reachedByRoad).DistinctBy(entry => entry.destination).OrderBy(entry => entry.destination.Id);
         return all;
+    }
+
+    public Place GetPlace(Names.Place name)
+    {
+        return _places[name];
     }
 }

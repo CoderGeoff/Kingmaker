@@ -1,4 +1,6 @@
-﻿namespace Kingmaker.Engine.Board;
+﻿using Kingmaker.Engine.Rules;
+
+namespace Kingmaker.Engine.Board;
 
 public class RoadNetwork
 {
@@ -8,7 +10,7 @@ public class RoadNetwork
         _roadSegments = roadSegments;
     }
 
-    public IEnumerable<(Tile destination, int distanceLeft)> TravelFrom(Tile start)
+    public IEnumerable<(Tile destination, int distanceLeft)> TravelFrom(Tile start, Faction faction, IMoveByRoadRules rules)
     {
         var result = new HashSet<Tile>(_roadSegments[start].Select(entry => entry.destination));
         var pending = new Queue<Tile>(result);
