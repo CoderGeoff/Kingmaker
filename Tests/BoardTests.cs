@@ -66,7 +66,7 @@ public class BoardTests
 
     [TestCase(1, "2(0), 7(0), 12(0)")]
     [TestCase(7, "1(0), 2(0), 12(0)")]
-    public void GivenABoardWithARoadButNoAdjacentSpaces_PossibleDestinationsWith1Space_ShouldReturnTheExpectedDestinations(int startingTile, string expectedDestinations)
+    public void GivenABoardWithARoadButNoAdjacentSpaces_PossibleDestinations_ShouldReturnTheExpectedDestinations(int startingTile, string expectedDestinations)
     {
         var tiles = new TileBuilder().WithLayout((12, [])).Build();
         
@@ -83,9 +83,9 @@ public class BoardTests
         Assert.That(asString, Is.EqualTo(expectedDestinations), asString);
     }
 
-    [TestCase(1, "2(0), 7(0), 12(0)")] 
-    [TestCase(7, "1(0), 2(0), 12(0)")]
-    public void GivenABoardWithARoadThroughAnOpponentsCastle_PossibleDestinationsWith1Space_ShouldReturnTheExpectedDestinations(int startingTile, string expectedDestinations)
+    [TestCase(1, "2(0), 5(0)")] 
+    [TestCase(7, "1(0), 2(0), 5(0), 12(0)")]
+    public void GivenABoardWithARoadThroughAnOpponentsCastle_PossibleDestinations_ShouldReturnTheExpectedDestinations(int startingTile, string expectedDestinations)
     {
         var tiles = new TileBuilder().WithLayout((12, [])).Build();
 
@@ -93,7 +93,7 @@ public class BoardTests
                                        .With(Names.Place.Coventry, PlaceAttributes.City, tiles[1])
                                        .Build();
 
-        var roads = new RoadNetworkBuilder(tiles, places).BuildRoad(1, 2).BuildRoad(2, Names.Place.Coventry, 7).BuildRoad(7, 12).Build();
+        var roads = new RoadNetworkBuilder(tiles, places).BuildRoad(1, 2).BuildRoad(2, 5).BuildRoad(2, Names.Place.Coventry, 7).BuildRoad(7, 12).Build();
 
         var board = new Board(tiles, places, roads);
         var start = board.GetTile(startingTile);
