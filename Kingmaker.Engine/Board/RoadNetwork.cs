@@ -17,7 +17,7 @@ public class RoadNetwork
         var pending = new Queue<Tile>(result);
         while (pending.TryDequeue(out var next))
         {
-            foreach (var possibleDestination in _roadSegments[next])
+            foreach (var possibleDestination in rules.NextTileByRoad(next, faction, _roadSegments))
             {
                 // don't travel back to where we started
                 if (possibleDestination.destination == start) continue;
