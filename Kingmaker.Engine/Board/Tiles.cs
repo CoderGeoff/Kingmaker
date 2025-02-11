@@ -15,11 +15,8 @@ public class Tiles
 
     public IEnumerable<(Tile destination, int distanceLeft)> TravelFrom(Tile start, int maximumDistance, IMoveCrossCountryRules rules)
     {
-        return maximumDistance <= 0 ? [] : TravelCrossCountry(start, maximumDistance, rules);
-    }
+        if (maximumDistance <= 0) return [];
 
-    private IEnumerable<(Tile destination, int distanceLeft)> TravelCrossCountry(Tile start, int maximumDistance, IMoveCrossCountryRules rules)
-    {
         var result = new Dictionary<Tile, int>();
         var destinations = rules.NextTileCrossCrossCountry(start, maximumDistance).ToList();
         while (destinations.Any())
