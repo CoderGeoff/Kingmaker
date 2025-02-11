@@ -28,7 +28,7 @@ public class BoardTests
         var roads = new RoadNetworkBuilder(tiles, places).Build();
         var board = new Board(tiles, new Dictionary<Names.Place, Place>(), roads);
         var start = board.GetTile(startingTile);
-        var destinations = board.TravelFrom(start, 1);
+        var destinations = board.PossibleDestinations(start, 1);
         var asString = AsString(destinations);
         Assert.That(asString, Is.EqualTo(expectedDestinations), asString);
     }
@@ -55,7 +55,7 @@ public class BoardTests
         var roads = new RoadNetworkBuilder(tiles, places).Build();
         var board = new Board(tiles, new Dictionary<Names.Place, Place>(), roads);
         var start = board.GetTile(startingTile);
-        var destinations = board.TravelFrom(start, 2);
+        var destinations = board.PossibleDestinations(start, 2);
         var asString = AsString(destinations);
         Assert.That(asString, Is.EqualTo(expectedDestinations), asString);
     }
@@ -74,7 +74,25 @@ public class BoardTests
 
         var board = new Board(tiles, places, roads);
         var start = board.GetTile(startingTile);
-        var destinations = board.TravelFrom(start, 1);
+        var destinations = board.PossibleDestinations(start, 1);
+        var asString = AsString(destinations);
+        Assert.That(asString, Is.EqualTo(expectedDestinations), asString);
+    }
+
+    [TestCase(1, "2(0), 7(0), 12(0)")] [TestCase(7, "1(0), 2(0), 12(0)")]
+    public void GivenABoardWithARoadThroughAnOpponentsCastle_Travel1Space_ShouldReturnTheExpectedDestinations(int startingTile, string expectedDestinations)
+    {
+        var tiles = new TileBuilder().WithLayout((12, [])).Build();
+
+        var places = new PlaceBuilder().With(Names.Place.Wells, PlaceAttributes.TownWithCathedral, tiles[2])
+                                       .With(Names.Place.Coventry, PlaceAttributes.City, tiles[1])
+                                       .Build();
+
+        var roads = new RoadNetworkBuilder(tiles, places).BuildRoad(1, Names.Place.Coventry, 2).BuildRoad(2, 7).BuildRoad(7, 12).Build();
+
+        var board = new Board(tiles, places, roads);
+        var start = board.GetTile(startingTile);
+        var destinations = board.PossibleDestinations(start, 1);
         var asString = AsString(destinations);
         Assert.That(asString, Is.EqualTo(expectedDestinations), asString);
     }
