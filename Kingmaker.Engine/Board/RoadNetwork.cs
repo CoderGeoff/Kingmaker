@@ -10,7 +10,7 @@ public class RoadNetwork
         _roadSegments = roadSegments;
     }
 
-    public IEnumerable<(Tile destination, int distanceLeft)> TravelFrom(Tile start, Faction faction, IMoveByRoadRules rules)
+    public IEnumerable<(Tile destination, int distanceLeft)> TravelFrom(Tile start, Faction faction, IRoadMovementRule rules)
     {
         var (firstDestinations, cantReach) = rules.NextTileByRoad(_roadSegments[start], faction, 0);
         var pending = new Queue<(Tile destination, int hopCount)>(firstDestinations);

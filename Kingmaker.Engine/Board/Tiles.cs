@@ -13,7 +13,7 @@ public class Tiles
 
     public Tile this[int i] => _tiles[i];
 
-    public IEnumerable<(Tile destination, int distanceLeft)> TravelFrom(Tile start, int maximumDistance, IMoveCrossCountryRules rules)
+    public IEnumerable<(Tile destination, int distanceLeft)> TravelFrom(Tile start, int maximumDistance, ICrossCountryMovementRule rules)
     {
         if (maximumDistance <= 0) return [];
 

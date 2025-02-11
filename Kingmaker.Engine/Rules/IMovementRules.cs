@@ -1,6 +1,3 @@
 ﻿namespace Kingmaker.Engine.Rules;
 
-public interface IMovementRules : IMoveByRoadRules, IMoveCrossCountryRules
-{
-
-}
+public interface IMovementRules : IRoadMovementRule, ICrossCountryMovementRule;

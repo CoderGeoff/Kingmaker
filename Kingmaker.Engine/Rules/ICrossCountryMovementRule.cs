@@ -2,7 +2,7 @@
 
 namespace Kingmaker.Engine.Rules;
 
-public interface IMoveCrossCountryRules
+public interface ICrossCountryMovementRule
 {
     IEnumerable<(Tile tile, int distanceLeft)> NextTileCrossCrossCountry(Tile start, int distanceLeft);
 }
