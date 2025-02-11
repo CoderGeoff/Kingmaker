@@ -1,6 +1,7 @@
 ﻿using Kingmaker.Engine;
 using Kingmaker.Engine.Board;
 using Kingmaker.Engine.Constants;
+using Kingmaker.Engine.Rules;
 using NUnit.Framework;
 using Place = Kingmaker.Engine.Board.Place;
 
@@ -31,7 +32,7 @@ public class BoardTests
         var roads = new RoadNetworkBuilder(tiles, places).Build();
         var board = new Board(tiles, new Dictionary<Names.Place, Place>(), roads);
         var start = board.GetTile(startingTile);
-        var destinations = board.PossibleDestinations(new Faction(), start, 1);
+        var destinations = board.PossibleDestinations(new Faction(), start, 1, new ClassicMovementRules());
         var asString = AsString(destinations);
         Assert.That(asString, Is.EqualTo(expectedDestinations), asString);
     }
@@ -58,7 +59,7 @@ public class BoardTests
         var roads = new RoadNetworkBuilder(tiles, places).Build();
         var board = new Board(tiles, new Dictionary<Names.Place, Place>(), roads);
         var start = board.GetTile(startingTile);
-        var destinations = board.PossibleDestinations(new Faction(), start, 2);
+        var destinations = board.PossibleDestinations(new Faction(), start, 2, new ClassicMovementRules());
         var asString = AsString(destinations);
         Assert.That(asString, Is.EqualTo(expectedDestinations), asString);
     }
@@ -77,7 +78,7 @@ public class BoardTests
 
         var board = new Board(tiles, places, roads);
         var start = board.GetTile(startingTile);
-        var destinations = board.PossibleDestinations(new Faction(), start, 1);
+        var destinations = board.PossibleDestinations(new Faction(), start, 1, new ClassicMovementRules());
         var asString = AsString(destinations);
         Assert.That(asString, Is.EqualTo(expectedDestinations), asString);
     }
@@ -100,7 +101,7 @@ public class BoardTests
         var player2 = new Faction();
         board.GetPlace(Names.Place.Coventry).GrantTo(player1);
 
-        var destinations = board.PossibleDestinations(player2, start, 1);
+        var destinations = board.PossibleDestinations(player2, start, 1, new ClassicMovementRules());
         var asString = AsString(destinations);
         Assert.That(asString, Is.EqualTo(expectedDestinations), asString);
     }

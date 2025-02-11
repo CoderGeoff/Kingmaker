@@ -5,7 +5,7 @@ namespace Kingmaker.Engine.Rules;
 public class ClassicMovementRules : IMovementRules
 {
     private readonly ClassicCrossCountryMovementRule _crossCountryMovementRule = new();
-    private readonly ClassicRoadMovementRule _roadMovementRule = new();
+    private readonly Classic1974RoadMovementRule _roadMovementRule = new();
 
     public IEnumerable<(Tile tile, int distanceLeft)> NextTileCrossCrossCountry(Tile start, int maximumDistance)
     {

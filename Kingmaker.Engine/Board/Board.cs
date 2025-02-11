@@ -21,9 +21,8 @@ public class Board
         return _tiles[id];
     }
 
-    public IEnumerable<(Tile destination, int distanceLeft)> PossibleDestinations(Faction faction, Tile start, int distance)
+    public IEnumerable<(Tile destination, int distanceLeft)> PossibleDestinations(Faction faction, Tile start, int distance, IMovementRules rules)
     {
-        var rules = new ClassicMovementRules();
         var reachedCrossCountry = _tiles.TravelFrom(start, distance, rules);
         var reachedByRoad = _roads.TravelFrom(start, faction, rules);
         var all = reachedCrossCountry.Concat(reachedByRoad).DistinctBy(entry => entry.destination).OrderBy(entry => entry.destination.Id);
