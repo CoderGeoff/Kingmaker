@@ -4,7 +4,7 @@ namespace Kingmaker.Engine.Rules;
 
 public class ClassicMovementRules : IMovementRules, IMoveCrossCountryRules
 {
-    public IEnumerable<(Tile tile, int distanceLeft)> MoveCrossCountry(Tile start, int maximumDistance)
+    public IEnumerable<(Tile tile, int distanceLeft)> MoveOne(Tile start, int maximumDistance)
     {
         // don't travel further than the maximum distance
         if (maximumDistance <= 0) return [];
