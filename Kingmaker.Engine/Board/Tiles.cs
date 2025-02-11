@@ -21,7 +21,7 @@ public class Tiles
     private IEnumerable<(Tile destination, int distanceLeft)> TravelCrossCountry(Tile start, int maximumDistance, IMoveCrossCountryRules rules)
     {
         var result = new Dictionary<Tile, int>();
-        var destinations = rules.MoveOne(start, maximumDistance).ToList();
+        var destinations = rules.NextTileCrossCrossCountry(start, maximumDistance).ToList();
         while (destinations.Any())
         {
             var destination = destinations.First();
@@ -35,7 +35,7 @@ public class Tiles
             if (!result.TryAdd(destination.tile, destination.distanceLeft))
                 continue;
 
-            destinations.AddRange(rules.MoveOne(destination.tile, destination.distanceLeft));
+            destinations.AddRange(rules.NextTileCrossCrossCountry(destination.tile, destination.distanceLeft));
         }
 
         return result.Select(entry => (entry.Key, entry.Value));

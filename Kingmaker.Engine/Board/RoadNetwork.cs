@@ -12,7 +12,8 @@ public class RoadNetwork
 
     public IEnumerable<(Tile destination, int distanceLeft)> TravelFrom(Tile start, Faction faction, IMoveByRoadRules rules)
     {
-        var result = new HashSet<Tile>(_roadSegments[start].Select(entry => entry.destination));
+        var roadSegment = rules.NextTileByRoad(start, faction, _roadSegments);
+        var result = new HashSet<Tile>(roadSegment.Select(entry => entry.destination));
         var pending = new Queue<Tile>(result);
         while (pending.TryDequeue(out var next))
         {
