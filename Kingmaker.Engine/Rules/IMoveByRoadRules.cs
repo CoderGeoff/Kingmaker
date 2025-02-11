@@ -4,5 +4,5 @@ namespace Kingmaker.Engine.Rules;
 
 public interface IMoveByRoadRules
 {
-    IEnumerable<(Place? mustPassThrough, Tile destination)> NextTileByRoad(Tile start, Faction faction, ILookup<Tile, (Place? mustPassThrough, Tile destination)> roadSegments);
+    (IEnumerable<(Tile destination, int hopCount)> destinations, IEnumerable<(Tile destination, Place blockedBy)> unreachable) NextTileByRoad(IEnumerable<(Place? passesThrough, Tile destination)> roadSegments, Faction faction, int hopCount);
 }

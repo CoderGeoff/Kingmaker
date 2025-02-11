@@ -21,11 +21,11 @@ public class Place : IPlaceAttributes
     public bool IsOpen => _attributes.IsOpen;
     public bool HasCathedral => _attributes.HasCathedral;
 
-    public bool TryGrantTo(Faction faction)
+    public void GrantTo(Faction faction)
     {
-        if (IsOpen) return false;
+        if (IsOpen) 
+            throw new ComputerInfringedGamesRulesException($"Invalid request to assign {Name} to a faction, but it is an open {_attributes.Description}");
         _owner = faction;
-        return true;
     }
 
     public bool TryGetOwner(out Faction owner)

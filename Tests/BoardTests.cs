@@ -92,13 +92,13 @@ public class BoardTests
                                        .With(Names.Place.Coventry, PlaceAttributes.City, tiles[1])
                                        .Build();
 
-        var roads = new RoadNetworkBuilder(tiles, places).BuildRoad(1, Names.Place.Coventry, 2).BuildRoad(2, 7).BuildRoad(7, 12).Build();
+        var roads = new RoadNetworkBuilder(tiles, places).BuildRoad(1, 2).BuildRoad(2, Names.Place.Coventry, 7).BuildRoad(7, 12).Build();
 
         var board = new Board(tiles, places, roads);
         var start = board.GetTile(startingTile);
         var player1 = new Faction();
         var player2 = new Faction();
-        board.GetPlace(Names.Place.Coventry).TryGrantTo(player1);
+        board.GetPlace(Names.Place.Coventry).GrantTo(player1);
 
         var destinations = board.PossibleDestinations(player2, start, 1);
         var asString = AsString(destinations);
