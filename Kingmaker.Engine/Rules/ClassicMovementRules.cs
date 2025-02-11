@@ -12,7 +12,7 @@ public class ClassicMovementRules : IMovementRules
         return start.AdjacentTiles.Select(tile => (tile, distanceLeft));
     }
 
-    public IEnumerable<(Place? mustPassThrough, Tile destination)> NextTileByRoad(Tile start, Faction faction, ILookup<Tile, (Place? mustPassThrough, Tile destination)> roadSegments)
+    public IEnumerable<(Place? blockedAt, Tile destination)> NextTileByRoad(Tile start, Faction faction, ILookup<Tile, (Place? mustPassThrough, Tile destination)> roadSegments)
     {
         return roadSegments[start];
     }
