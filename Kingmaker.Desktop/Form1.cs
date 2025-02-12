@@ -6,5 +6,10 @@ namespace Kingmaker.Desktop
         {
             InitializeComponent();
         }
+
+        private void OnClickExit(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }
