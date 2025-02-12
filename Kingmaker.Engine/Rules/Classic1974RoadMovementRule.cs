@@ -12,7 +12,7 @@ public class Classic1974RoadMovementRule : IRoadMovementRule
 
         bool IsBlocked(Place? passesThrough)
         {
-            return hopCount > 0 && passesThrough is not null && passesThrough.TryGetOwner(out var owner) && owner != faction;
+            return hopCount > 0 && passesThrough?.TryGetOwner(out var owner) == true && owner != faction;
         }
     }
 }
