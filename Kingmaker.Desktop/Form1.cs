@@ -2,7 +2,7 @@ namespace Kingmaker.Desktop;
 
 public partial class Kingmaker : Form
 {
-    private readonly BoardDragEvent _boardDragging = new();
+    private readonly DragEvent _mapDragging = new();
     public Kingmaker()
     {
         InitializeComponent();
@@ -22,16 +22,16 @@ public partial class Kingmaker : Form
         }
     }
 
-    private void OnMouseDownOverBoard(object sender, MouseEventArgs e)
+    private void OnMouseDownOverMap(object sender, MouseEventArgs e)
     {
-        _boardDragging.Start(Cursor.Position);
+        _mapDragging.Start(Cursor.Position);
     }
 
     private void OnMouseMove(object? sender, MouseEventArgs e)
     {
-        if (_boardDragging.IsActive)
+        if (_mapDragging.IsActive)
         {
-            var drag = _boardDragging.Drag(Cursor.Position);
+            var drag = _mapDragging.Drag(Cursor.Position);
             _mapPanel.Location += drag.ConvertToSize();
         }
     }
@@ -39,7 +39,7 @@ public partial class Kingmaker : Form
     private void OnMouseUp(object? sender, MouseEventArgs e)
     {
         OnMouseMove(sender, e);
-        _boardDragging.Stop();
+        _mapDragging.Stop();
     }
 
     private void OnClickExit(object sender, EventArgs e)

@@ -104,7 +104,7 @@ namespace Kingmaker.Desktop
             _mapPanel.Location = new Point(0, 0);
             _mapPanel.Name = "_mapPanel";
             _mapPanel.Size = new Size(4631, 6469);
-            _mapPanel.MouseDown += OnMouseDownOverBoard;
+            _mapPanel.MouseDown += OnMouseDownOverMap;
             _mapPanel.TabIndex = 2;
             // 
             // _boardVScroll

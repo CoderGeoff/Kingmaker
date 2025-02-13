@@ -1,6 +1,6 @@
 namespace Kingmaker.Desktop;
 
-public class BoardDragEvent
+public class DragEvent
 {
     private Point _origin;
     public bool IsActive { get; private set; }
