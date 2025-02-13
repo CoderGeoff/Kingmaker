@@ -34,10 +34,10 @@ namespace Kingmaker.Desktop
             _gameMenu = new ToolStripMenuItem();
             panel2 = new Panel();
             _outerBoardPanel = new Panel();
+            _boardHScroll = new HScrollBar();
+            _boardVScroll = new VScrollBar();
             _innerBoardPanel = new Panel();
             _mapPanel = new Panel();
-            _boardVScroll = new VScrollBar();
-            _boardHScroll = new HScrollBar();
             _mainMenu.SuspendLayout();
             _outerBoardPanel.SuspendLayout();
             _innerBoardPanel.SuspendLayout();
@@ -86,13 +86,29 @@ namespace Kingmaker.Desktop
             _outerBoardPanel.Size = new Size(560, 399);
             _outerBoardPanel.TabIndex = 3;
             // 
+            // _boardHScroll
+            // 
+            _boardHScroll.Dock = DockStyle.Bottom;
+            _boardHScroll.Location = new Point(0, 373);
+            _boardHScroll.Name = "_boardHScroll";
+            _boardHScroll.Size = new Size(534, 26);
+            _boardHScroll.TabIndex = 0;
+            // 
+            // _boardVScroll
+            // 
+            _boardVScroll.Dock = DockStyle.Right;
+            _boardVScroll.Location = new Point(534, 0);
+            _boardVScroll.Name = "_boardVScroll";
+            _boardVScroll.Size = new Size(26, 399);
+            _boardVScroll.TabIndex = 1;
+            // 
             // _innerBoardPanel
             // 
             _innerBoardPanel.Controls.Add(_mapPanel);
             _innerBoardPanel.Dock = DockStyle.Fill;
             _innerBoardPanel.Location = new Point(0, 0);
             _innerBoardPanel.Name = "_innerBoardPanel";
-            _innerBoardPanel.Size = new Size(534, 373);
+            _innerBoardPanel.Size = new Size(560, 399);
             _innerBoardPanel.TabIndex = 3;
             _innerBoardPanel.MouseMove += OnMouseMove;
             _innerBoardPanel.MouseUp += OnMouseUp;
@@ -100,28 +116,13 @@ namespace Kingmaker.Desktop
             // _mapPanel
             // 
             _mapPanel.BackgroundImage = (Image)resources.GetObject("_mapPanel.BackgroundImage");
+            _mapPanel.BorderStyle = BorderStyle.Fixed3D;
             _mapPanel.Cursor = Cursors.Hand;
             _mapPanel.Location = new Point(0, 0);
             _mapPanel.Name = "_mapPanel";
             _mapPanel.Size = new Size(4631, 6469);
-            _mapPanel.MouseDown += OnMouseDownOverMap;
             _mapPanel.TabIndex = 2;
-            // 
-            // _boardVScroll
-            // 
-            _boardVScroll.Dock = DockStyle.Right;
-            _boardVScroll.Location = new Point(534, 0);
-            _boardVScroll.Name = "_boardVScroll";
-            _boardVScroll.Size = new Size(26, 373);
-            _boardVScroll.TabIndex = 1;
-            // 
-            // _boardHScroll
-            // 
-            _boardHScroll.Dock = DockStyle.Bottom;
-            _boardHScroll.Location = new Point(0, 373);
-            _boardHScroll.Name = "_boardHScroll";
-            _boardHScroll.Size = new Size(560, 26);
-            _boardHScroll.TabIndex = 0;
+            _mapPanel.MouseDown += OnMouseDownOverMap;
             // 
             // Kingmaker
             // 
@@ -138,7 +139,6 @@ namespace Kingmaker.Desktop
             _mainMenu.PerformLayout();
             _outerBoardPanel.ResumeLayout(false);
             _innerBoardPanel.ResumeLayout(false);
-            _mapPanel.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }

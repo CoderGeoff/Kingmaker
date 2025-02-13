@@ -35,6 +35,8 @@ public partial class Kingmaker : Form
 
     private void DragMap(bool mayIgnore = true)
     {
+        try
+        {
             var dragSize = _mapDragging.Drag(Cursor.Position).ConvertToSize();
             if (mayIgnore && dragSize.Abs() is { Width: < 10, Height: < 10 })
                 return;
@@ -42,11 +44,17 @@ public partial class Kingmaker : Form
             var newMapLocation = _mapPanel.Location + dragSize;
             newMapLocation = newMapLocation.EnsureFullyOverlapsItsParent(_mapPanel);
             _mapPanel.Location = newMapLocation;
+        }
+        catch
+        {
+            // ignored
+        }
     }
 
     private void OnMouseUp(object? sender, MouseEventArgs e)
     {
-        OnMouseMove(sender, e);
+        if (_mapDragging.IsActive)
+            DragMap(mayIgnore: false);
         _mapDragging.Stop();
     }
 
