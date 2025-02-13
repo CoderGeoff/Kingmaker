@@ -29,13 +29,18 @@ public partial class Kingmaker : Form
 
     private void OnMouseMove(object? sender, MouseEventArgs e)
     {
-        if (_mapDragging.IsActive)
-        {
+        if (_mapDragging.IsActive) DragMap();
+    }
+
+    private void DragMap(bool mayIgnore = true)
+    {
             var dragSize = _mapDragging.Drag(Cursor.Position).ConvertToSize();
+            if (mayIgnore && dragSize.Abs() is { Width: < 10, Height: < 10 })
+                return;
+
             var newMapLocation = _mapPanel.Location + dragSize;
             newMapLocation = newMapLocation.EnsureFullyOverlapsItsParent(_mapPanel);
             _mapPanel.Location = newMapLocation;
-        }
     }
 
     private void OnMouseUp(object? sender, MouseEventArgs e)
@@ -47,18 +52,5 @@ public partial class Kingmaker : Form
     private void OnClickExit(object sender, EventArgs e)
     {
         Application.Exit();
-    }
-}
-
-public static class ControlExtensions
-{
-    public static Point EnsureFullyOverlapsItsParent(this Point location, Control control)
-    {
-        var parent = control.Parent;
-        if (parent == null) return location;
-        var min = (parent.Size - control.Size).ConvertToPoint();
-        var max = new Point(0, 0);
-
-        return location.EnsureIsBetween(min, max, out var adjusted) ? adjusted : location;
     }
 }
