@@ -33,6 +33,13 @@ public partial class Kingmaker : Form
             DragMap();
     }
 
+    private void OnMouseUp(object? sender, MouseEventArgs e)
+    {
+        if (_mapDragging.IsActive)
+            DragMap(mayIgnore: false);
+        _mapDragging.Stop();
+    }
+
     private void DragMap(bool mayIgnore = true)
     {
         try
@@ -49,13 +56,6 @@ public partial class Kingmaker : Form
         {
             // ignored
         }
-    }
-
-    private void OnMouseUp(object? sender, MouseEventArgs e)
-    {
-        if (_mapDragging.IsActive)
-            DragMap(mayIgnore: false);
-        _mapDragging.Stop();
     }
 
     private void OnClickExit(object sender, EventArgs e)
