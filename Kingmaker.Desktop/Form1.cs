@@ -31,8 +31,10 @@ public partial class Kingmaker : Form
     {
         if (_mapDragging.IsActive)
         {
-            var drag = _mapDragging.Drag(Cursor.Position);
-            _mapPanel.Location += drag.ConvertToSize();
+            var dragSize = _mapDragging.Drag(Cursor.Position).ConvertToSize();
+            var newMapLocation = _mapPanel.Location + dragSize;
+            newMapLocation = newMapLocation.EnsureFullyOverlapsItsParent(_mapPanel);
+            _mapPanel.Location = newMapLocation;
         }
     }
 
@@ -45,5 +47,18 @@ public partial class Kingmaker : Form
     private void OnClickExit(object sender, EventArgs e)
     {
         Application.Exit();
+    }
+}
+
+public static class ControlExtensions
+{
+    public static Point EnsureFullyOverlapsItsParent(this Point location, Control control)
+    {
+        var parent = control.Parent;
+        if (parent == null) return location;
+        var min = (parent.Size - control.Size).ConvertToPoint();
+        var max = new Point(0, 0);
+
+        return location.EnsureIsBetween(min, max, out var adjusted) ? adjusted : location;
     }
 }
