@@ -29,7 +29,8 @@ public partial class Kingmaker : Form
 
     private void OnMouseMove(object? sender, MouseEventArgs e)
     {
-        if (_mapDragging.IsActive) DragMap();
+        if (_mapDragging.IsActive) 
+            DragMap();
     }
 
     private void DragMap(bool mayIgnore = true)
