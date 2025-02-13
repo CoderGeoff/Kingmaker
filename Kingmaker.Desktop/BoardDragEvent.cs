@@ -2,29 +2,24 @@ namespace Kingmaker.Desktop;
 
 public class BoardDragEvent
 {
-    private int _x;
-    private int _y;
+    private Point _origin;
     public bool IsActive { get; private set; }
 
-    public void Start(int x, int y)
+    public void Start(Point origin)
     {
-        _y = y;
-        _x = x;
+        _origin = origin;
         IsActive = true;
     }
 
-    public ScalingVector MoveTo(int x, int y)
+    public Point Drag(Point destination)
     {
-        var scalingVector = new ScalingVector(_x, _y, x, y);
-        _x = x;
-        _y = y;
-        return scalingVector;
+        var drag = destination - _origin.ConvertToSize();
+        _origin = destination;
+        return drag;
     }
 
-    public ScalingVector Stop(int x, int y)
+    public void Stop()
     {
         IsActive = false;
-        return new ScalingVector(_x, _y, x, y);
     }
-
 }

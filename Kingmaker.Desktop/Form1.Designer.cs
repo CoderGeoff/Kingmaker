@@ -1,4 +1,4 @@
-﻿namespace Kingmaker.Desktop
+namespace Kingmaker.Desktop
 {
     partial class Kingmaker
     {
@@ -43,7 +43,7 @@
             _innerBoardPanel.SuspendLayout();
             SuspendLayout();
             // 
-            // menuStrip1
+            // _mainMenu
             // 
             _mainMenu.ImageScalingSize = new Size(20, 20);
             _mainMenu.Items.AddRange(new ToolStripItem[] { gameToolStripMenuItem });
@@ -77,14 +77,25 @@
             // 
             // _outerBoardPanel
             // 
-            _outerBoardPanel.Controls.Add(_innerBoardPanel);
-            _outerBoardPanel.Controls.Add(_boardVScroll);
             _outerBoardPanel.Controls.Add(_boardHScroll);
+            _outerBoardPanel.Controls.Add(_boardVScroll);
+            _outerBoardPanel.Controls.Add(_innerBoardPanel);
             _outerBoardPanel.Dock = DockStyle.Fill;
             _outerBoardPanel.Location = new Point(0, 28);
             _outerBoardPanel.Name = "_outerBoardPanel";
             _outerBoardPanel.Size = new Size(560, 399);
             _outerBoardPanel.TabIndex = 3;
+            // 
+            // _innerBoardPanel
+            // 
+            _innerBoardPanel.Controls.Add(_mapPanel);
+            _innerBoardPanel.Dock = DockStyle.Fill;
+            _innerBoardPanel.Location = new Point(0, 0);
+            _innerBoardPanel.Name = "_innerBoardPanel";
+            _innerBoardPanel.Size = new Size(534, 373);
+            _innerBoardPanel.TabIndex = 3;
+            _innerBoardPanel.MouseMove += OnMouseMove;
+            _innerBoardPanel.MouseUp += OnMouseUp;
             // 
             // _mapPanel
             // 
@@ -92,20 +103,11 @@
             _mapPanel.Cursor = Cursors.Hand;
             _mapPanel.Location = new Point(0, 0);
             _mapPanel.Name = "_mapPanel";
-            _mapPanel.Size = new Size(_mapPanel.BackgroundImage.Size.Width, _mapPanel.BackgroundImage.Size.Height);
+            _mapPanel.Size = new Size(4631, 6469);
+            _mapPanel.MouseDown += OnMouseDownOverBoard;
             _mapPanel.TabIndex = 2;
             // 
-            // _innerBoardPanel
-            // 
-            _innerBoardPanel.Controls.Add(_mapPanel);
-            _innerBoardPanel.Location = new Point(0, 28);
-            _innerBoardPanel.Name = "_innerBoardPanel";
-            _innerBoardPanel.Size = new Size(560, 399);
-            _innerBoardPanel.Dock = DockStyle.Fill;
-            _innerBoardPanel.TabIndex = 3;
-            _innerBoardPanel.MouseDown += OnMouseDownOverBoard;
-            // 
-            // vScrollBar1
+            // _boardVScroll
             // 
             _boardVScroll.Dock = DockStyle.Right;
             _boardVScroll.Location = new Point(534, 0);
@@ -113,7 +115,7 @@
             _boardVScroll.Size = new Size(26, 373);
             _boardVScroll.TabIndex = 1;
             // 
-            // hScrollBar1
+            // _boardHScroll
             // 
             _boardHScroll.Dock = DockStyle.Bottom;
             _boardHScroll.Location = new Point(0, 373);
@@ -135,6 +137,8 @@
             _mainMenu.ResumeLayout(false);
             _mainMenu.PerformLayout();
             _outerBoardPanel.ResumeLayout(false);
+            _innerBoardPanel.ResumeLayout(false);
+            _mapPanel.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }

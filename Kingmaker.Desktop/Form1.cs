@@ -1,41 +1,49 @@
-namespace Kingmaker.Desktop
+namespace Kingmaker.Desktop;
+
+public partial class Kingmaker : Form
 {
-    public partial class Kingmaker : Form
+    private readonly BoardDragEvent _boardDragging = new();
+    public Kingmaker()
     {
-        private readonly BoardDragEvent _boardDragging = new();
-        public Kingmaker()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+        CaptureMouseEvents();
+    }
 
-        private void OnMouseDownOverBoard(object sender, MouseEventArgs e)
-        {
-            _boardDragging.Start(e.X, e.Y);
-        }
+    private void CaptureMouseEvents()
+    {
+        SetMouseCapture(this);
 
-        private void OnMouseMove(object sender, MouseEventArgs e)
+        void SetMouseCapture(Control c)
         {
-            if (_boardDragging.IsActive)
-            {
-                var drag = _boardDragging.Stop(e.X, e.Y);
-                //_mapPanel.
-            }
-
+            c.MouseUp += OnMouseUp;
+            c.MouseMove += OnMouseMove;
+            foreach (var child in c.Controls.OfType<Control>())
+                SetMouseCapture(child);
         }
+    }
 
-        private void OnMouseUp(object sender, MouseEventArgs e)
+    private void OnMouseDownOverBoard(object sender, MouseEventArgs e)
+    {
+        _boardDragging.Start(Cursor.Position);
+    }
+
+    private void OnMouseMove(object? sender, MouseEventArgs e)
+    {
+        if (_boardDragging.IsActive)
         {
-            if (_boardDragging.IsActive)
-            {
-                var drag = _boardDragging.Stop(e.X, e.Y);
-                //_mapPanel.
-                return;
-            }
+            var drag = _boardDragging.Drag(Cursor.Position);
+            _mapPanel.Location += drag.ConvertToSize();
         }
+    }
 
-        private void OnClickExit(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
+    private void OnMouseUp(object? sender, MouseEventArgs e)
+    {
+        OnMouseMove(sender, e);
+        _boardDragging.Stop();
+    }
+
+    private void OnClickExit(object sender, EventArgs e)
+    {
+        Application.Exit();
     }
 }
