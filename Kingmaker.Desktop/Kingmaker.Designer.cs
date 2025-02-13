@@ -37,10 +37,11 @@ namespace Kingmaker.Desktop
             _boardHScroll = new HScrollBar();
             _boardVScroll = new VScrollBar();
             _innerBoardPanel = new Panel();
-            _mapPanel = new Panel();
+            _mapPanel = new PictureBox();
             _mainMenu.SuspendLayout();
             _outerBoardPanel.SuspendLayout();
             _innerBoardPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)_mapPanel).BeginInit();
             SuspendLayout();
             // 
             // _mainMenu
@@ -115,13 +116,15 @@ namespace Kingmaker.Desktop
             // 
             // _mapPanel
             // 
-            _mapPanel.BackgroundImage = (Image)resources.GetObject("_mapPanel.BackgroundImage");
             _mapPanel.BorderStyle = BorderStyle.Fixed3D;
             _mapPanel.Cursor = Cursors.Hand;
+            _mapPanel.Image = (Image)resources.GetObject("_mapPanel.Image");
             _mapPanel.Location = new Point(0, 0);
             _mapPanel.Name = "_mapPanel";
             _mapPanel.Size = new Size(4631, 6469);
+            _mapPanel.SizeMode = PictureBoxSizeMode.Zoom;
             _mapPanel.TabIndex = 2;
+            _mapPanel.TabStop = false;
             _mapPanel.MouseDown += OnMouseDownOverMap;
             // 
             // Kingmaker
@@ -139,6 +142,7 @@ namespace Kingmaker.Desktop
             _mainMenu.PerformLayout();
             _outerBoardPanel.ResumeLayout(false);
             _innerBoardPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)_mapPanel).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -153,6 +157,6 @@ namespace Kingmaker.Desktop
         private Panel _innerBoardPanel;
         private VScrollBar _boardVScroll;
         private HScrollBar _boardHScroll;
-        private Panel _mapPanel;
+        private PictureBox _mapPanel;
     }
 }

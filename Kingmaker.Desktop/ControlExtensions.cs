@@ -9,6 +9,6 @@ public static class ControlExtensions
         var min = (parent.Size - control.Size).ConvertToPoint();
         var max = new Point(0, 0);
 
-        return location.EnsureIsBetween(min, max, out var adjusted) ? adjusted : location;
+        return location.EnsureIsBetween(min, max);
     }
 }
