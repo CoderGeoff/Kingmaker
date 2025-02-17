@@ -34,14 +34,42 @@ public partial class Kingmaker : Form, IMessageFilter
     private void OnMouseWheel(object? sender, MouseEventArgs e)
     {
         const int wheelDelta = 120;
-        var magnitude = e.Delta / wheelDelta;
-        if (ModifierKeys == Keys.Control)
+        var magnitude = (double) e.Delta / wheelDelta;
+        switch (ModifierKeys)
         {
-            const int max = 12;
-            var multiplier = 1 + (double) magnitude / max;
-            var mapPanelSize = _mapPanel.Size.Multiply(multiplier).EnsureIsBetween(_minimumMapSize, _maximumMapSize);
-            _mapPanel.Size = mapPanelSize;
+            case Keys.Control:
+                HandleZoomMap(magnitude);
+                break;
+            case Keys.None:
+                HandleShiftVertical(magnitude);
+                break;
+            case Keys.Shift:
+                HandleShiftHorizontal(magnitude);
+                break;
+            // ignore other scroll actions
         }
+    }
+
+    private void HandleZoomMap(double magnitude)
+    {
+        const int max = 12;
+        var multiplier = 1 + magnitude / max;
+        var mapPanelSize = _mapPanel.Size.Multiply(multiplier).EnsureIsBetween(_minimumMapSize, _maximumMapSize);
+        _mapPanel.Size = mapPanelSize;
+    }
+
+    private void HandleShiftVertical(double magnitude)
+    {
+        const int max = 15;
+        var movementSize = new Size(0, (int) (_mapPanel.Size.Height * magnitude / max));
+        MoveMap(movementSize, false);
+    }
+
+    private void HandleShiftHorizontal(double magnitude)
+    {
+        const int max = 15;
+        var movementSize = new Size((int)(_mapPanel.Size.Width * magnitude / max), 0);
+        MoveMap(movementSize, false);
     }
 
     private void OnMouseDownOverMap(object sender, MouseEventArgs e)
@@ -52,21 +80,26 @@ public partial class Kingmaker : Form, IMessageFilter
     private void OnMouseMove(object? sender, MouseEventArgs e)
     {
         if (_mapDragging.IsActive) 
-            DragMap();
+            DragMap(true);
     }
 
     private void OnMouseUp(object? sender, MouseEventArgs e)
     {
         if (_mapDragging.IsActive)
-            DragMap(mayIgnore: false);
+            DragMap(false);
         _mapDragging.Stop();
     }
 
-    private void DragMap(bool mayIgnore = true)
+    private void DragMap(bool mayIgnore)
+    {
+        var dragSize = _mapDragging.Drag(Cursor.Position).ConvertToSize();
+        MoveMap(dragSize, mayIgnore);
+    }
+
+    private void MoveMap(Size dragSize, bool mayIgnore)
     {
         try
         {
-            var dragSize = _mapDragging.Drag(Cursor.Position).ConvertToSize();
             if (mayIgnore && dragSize.Abs() is { Width: < 10, Height: < 10 })
                 return;
 
